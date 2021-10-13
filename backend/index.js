@@ -2,9 +2,17 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const dotenv = require('dotenv')
+const cors = require('cors')
+const todos = require('./routes/todos')
 
 dotenv.config();
 
+//Add Middleware
+app.use(cors())
+app.use(express.json())
+
+//Add Post Endpoint
+app.use('/api/todos', todos)
 
 //Create API endpoint
 app.get("/", (req, res) => {
