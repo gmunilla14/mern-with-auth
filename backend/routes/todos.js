@@ -68,17 +68,22 @@ router.delete("/", async (req, res) => {
   //const todo = await Todo.deleteOne({isComplete:true})
 
   //deleteMany()
-  const todo = await Todo.deleteMany({ isComplete: false });
+  try {
+    const todo = await Todo.deleteMany({ isComplete: false });
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
 });
 
 router.delete("/:id", async (req, res) => {
-  //Check to see if a todo with the given id exists
-  const todo = await Todo.findById(req.params.id);
-
-  //Send Error 404 if there is no To do
-  if (!todo) return res.status(404).send("Todo Not Found...");
-
   try {
+    //Check to see if a todo with the given id exists
+    const todo = await Todo.findById(req.params.id);
+
+    //Send Error 404 if there is no To do
+    if (!todo) return res.status(404).send("Todo Not Found...");
+
     //findByIdAndDelete()
     const todo = await Todo.findByIdAndDelete(req.params.id);
 
@@ -88,7 +93,6 @@ router.delete("/:id", async (req, res) => {
     console.log(error.message);
   }
 });
-
 
 router.put("/:id", async (req, res) => {
   //Add Joi validation
@@ -106,16 +110,16 @@ router.put("/:id", async (req, res) => {
   //Error to client
   if (error) return res.status(400).send(error.details[0].message);
 
-  //Check to see if a todo with the given id exists
-  const todo = await Todo.findById(req.params.id);
-
-  //Send Error 404 if there is no To do
-  if (!todo) return res.status(404).send("Todo Not Found...");
-
-  //Get update parameters from API call
-  const { name, author, isComplete, date, uid } = req.body;
-
   try {
+    //Check to see if a todo with the given id exists
+    const todo = await Todo.findById(req.params.id);
+
+    //Send Error 404 if there is no To do
+    if (!todo) return res.status(404).send("Todo Not Found...");
+
+    //Get update parameters from API call
+    const { name, author, isComplete, date, uid } = req.body;
+
     //Update the To do
     const updatedTodo = await Todo.findByIdAndUpdate(
       req.params.id,
@@ -130,25 +134,24 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
-  
-  //Check to see if a todo with the given id exists
-  const todo = await Todo.findById(req.params.id);
+router.patch("/:id", async (req, res) => {
+  try {
+    //Check to see if a todo with the given id exists
+    const todo = await Todo.findById(req.params.id);
 
-  //Send Error 404 if there is no To do
-  if (!todo) return res.status(404).send("Todo Not Found...");
+    //Send Error 404 if there is no To do
+    if (!todo) return res.status(404).send("Todo Not Found...");
 
-  try{const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
-    //Set isComplete to the opposite value
-    isComplete: !todo.isComplete
-  });
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
+      //Set isComplete to the opposite value
+      isComplete: !todo.isComplete,
+    });
 
-  res.send(updatedTodo);
-}catch(error){
-  res.status(500).send(error.message);
-  console.log(error.message);
-}
-  
-})
+    res.send(updatedTodo);
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
+});
 
 module.exports = router;
