@@ -72,6 +72,12 @@ router.delete("/", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
+  //Check to see if a todo with the given id exists
+  const todo = await Todo.findById(req.params.id);
+
+  //Send Error 404 if there is no To do
+  if (!todo) return res.status(404).send("Todo Not Found...");
+
   try {
     //findByIdAndDelete()
     const todo = await Todo.findByIdAndDelete(req.params.id);
@@ -82,6 +88,7 @@ router.delete("/:id", async (req, res) => {
     console.log(error.message);
   }
 });
+
 
 router.put("/:id", async (req, res) => {
   //Add Joi validation
@@ -122,5 +129,26 @@ router.put("/:id", async (req, res) => {
     console.log(error.message);
   }
 });
+
+router.patch('/:id', async (req, res) => {
+  
+  //Check to see if a todo with the given id exists
+  const todo = await Todo.findById(req.params.id);
+
+  //Send Error 404 if there is no To do
+  if (!todo) return res.status(404).send("Todo Not Found...");
+
+  try{const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
+    //Set isComplete to the opposite value
+    isComplete: !todo.isComplete
+  });
+
+  res.send(updatedTodo);
+}catch(error){
+  res.status(500).send(error.message);
+  console.log(error.message);
+}
+  
+})
 
 module.exports = router;
