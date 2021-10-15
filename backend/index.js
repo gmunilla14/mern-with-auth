@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const dotenv = require('dotenv')
 const cors = require('cors')
 const todos = require('./routes/todos')
+const signUp = require('./routes/signUp')
+const signIn = require('./routes/signIn')
 
 dotenv.config();
 
@@ -11,8 +13,10 @@ dotenv.config();
 app.use(cors())
 app.use(express.json())
 
-//Add Post Endpoint
+//Add Endpoints
 app.use('/api/todos', todos)
+app.use('/api/signup', signUp)
+app.use('/api/signin', signIn)
 
 //Create API endpoint
 app.get("/", (req, res) => {
