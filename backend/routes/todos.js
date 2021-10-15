@@ -83,4 +83,44 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  //Add Joi validation
+  const schema = Joi.object({
+    name: Joi.string().min(3).max(200).required(),
+    author: Joi.string().min(3).max(30),
+    uid: Joi.string(),
+    isComplete: Joi.boolean(),
+    date: Joi.date(),
+  }).options({ abortEarly: false });
+
+  const { error } = schema.validate(req.body);
+
+  //If there is an error stops all the later code from happening and sends
+  //Error to client
+  if (error) return res.status(400).send(error.details[0].message);
+
+  //Check to see if a todo with the given id exists
+  const todo = await Todo.findById(req.params.id);
+
+  //Send Error 404 if there is no To do
+  if (!todo) return res.status(404).send("Todo Not Found...");
+
+  //Get update parameters from API call
+  const { name, author, isComplete, date, uid } = req.body;
+
+  try {
+    //Update the To do
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      { name, author, isComplete, date, uid },
+      { new: true }
+    );
+
+    res.send(updatedTodo);
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
+});
+
 module.exports = router;
