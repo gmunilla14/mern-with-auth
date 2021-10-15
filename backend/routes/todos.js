@@ -6,13 +6,12 @@ const Joi = require("joi");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  try{
-  const todos = await Todo.find()
-    .sort({ date: -1 })
-  res.send(todos);
-  } catch(error) {
+  try {
+    const todos = await Todo.find().sort({ date: -1 });
+    res.send(todos);
+  } catch (error) {
     res.status(500).send(error.message);
-    console.log(error.message)
+    console.log(error.message);
   }
 });
 
@@ -56,6 +55,27 @@ router.post("/", async (req, res) => {
 */
   try {
     todo = await todo.save();
+    res.send(todo);
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message);
+  }
+});
+
+router.delete("/", async (req, res) => {
+  //deleteOne() If there are multiple that satisfy the filter, the first
+  //one that is found will be deleted
+  //const todo = await Todo.deleteOne({isComplete:true})
+
+  //deleteMany()
+  const todo = await Todo.deleteMany({ isComplete: false });
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    //findByIdAndDelete()
+    const todo = await Todo.findByIdAndDelete(req.params.id);
+
     res.send(todo);
   } catch (error) {
     res.status(500).send(error.message);
