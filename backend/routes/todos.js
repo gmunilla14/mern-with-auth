@@ -1,27 +1,36 @@
 const { Todo } = require("../models/todo");
 const express = require("express");
-const Joi = require('joi')
+const Joi = require("joi");
 
 //Create instance of Router
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.get("/", async (req, res) => {
+  try{
+  const todos = await Todo.find()
+    .sort({ date: -1 })
+  res.send(todos);
+  } catch(error) {
+    res.status(500).send(error.message);
+    console.log(error.message)
+  }
+});
 
+router.post("/", async (req, res) => {
   //Add Joi validation
   const schema = Joi.object({
     name: Joi.string().min(3).max(200).required(),
     author: Joi.string().min(3).max(30),
     uid: Joi.string(),
     isComplete: Joi.boolean(),
-    date: Joi.date()
-  }).options( { abortEarly: false});
+    date: Joi.date(),
+  }).options({ abortEarly: false });
 
-  const { error} = schema.validate(req.body);
- 
+  const { error } = schema.validate(req.body);
+
   //If there is an error stops all the later code from happening and sends
   //Error to client
-  if (error) return res.status(400).send(error.details[0].message)
-
+  if (error) return res.status(400).send(error.details[0].message);
 
   const { name, author, isComplete, date, uid } = req.body;
 
@@ -33,7 +42,7 @@ router.post("/", async (req, res) => {
     uid,
   });
 
-  //The following two are the same if you remove async from 
+  //The following two are the same if you remove async from
   //Before the arrow func
   /*
   todo
@@ -54,4 +63,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-module.exports = router
+module.exports = router;
