@@ -85,9 +85,9 @@ router.delete("/:id", async (req, res) => {
     if (!todo) return res.status(404).send("Todo Not Found...");
 
     //findByIdAndDelete()
-    const todo = await Todo.findByIdAndDelete(req.params.id);
+    const deletedTodo = await Todo.findByIdAndDelete(req.params.id);
 
-    res.send(todo);
+    res.send(deletedTodo);
   } catch (error) {
     res.status(500).send(error.message);
     console.log(error.message);
