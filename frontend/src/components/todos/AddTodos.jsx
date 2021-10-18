@@ -43,8 +43,6 @@ const AddTodo = ({ todo, setTodo }) => {
       dispatch(addTodo(newTodo));
     }
 
-    dispatch(addTodo(todo));
-
     setTodo({
       name: "",
       isComplete: false,

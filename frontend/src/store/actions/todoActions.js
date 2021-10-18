@@ -1,5 +1,6 @@
 import axios from "axios";
 import { url } from "../../api/index";
+import { toast } from "react-toastify";
 
 export const getTodos = () => {
   return (dispatch) => {
@@ -35,11 +36,13 @@ export const updateTodo = (updatedTodo, id) => {
     axios
       .put(`${url}/todos/${id}`, updatedTodo)
       .then((todo) => {
-        dispatch({ type: "UPDATE_TODO",  todo });
+        dispatch({ type: "UPDATE_TODO", todo });
       })
       .catch((error) => {
         console.log(error.response);
+        toast.error(error.response?.data, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       });
   };
 };
-
