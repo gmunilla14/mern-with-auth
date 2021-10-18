@@ -15,7 +15,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ListTodos = () => {
+const ListTodos = ({ setTodo }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todos);
@@ -30,14 +30,10 @@ const ListTodos = () => {
         <Typography variant="h5">
           {todos.length > 0 ? "Todos" : "No Todos Yet"}
         </Typography>
-        {todos && todos.map((todo) => {
-            return (
-                <Todo
-                todo={todo}
-                key={todo._id}/>
-            )
-        })}
-
+        {todos &&
+          todos.map((todo) => {
+            return <Todo todo={todo} key={todo._id} setTodo={setTodo} />;
+          })}
       </div>
     </>
   );

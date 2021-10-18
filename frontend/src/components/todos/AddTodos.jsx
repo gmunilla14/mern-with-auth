@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../../store/actions/todoActions";
+import { addTodo, updateTodo } from "../../store/actions/todoActions";
 
 import { TextField, Button, Toolbar } from "@material-ui/core";
 import { Send } from "@material-ui/icons";
@@ -19,16 +19,29 @@ const useStyles = makeStyles({
   },
 });
 
-const AddTodo = () => {
+const AddTodo = ({ todo, setTodo }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [todo, setTodo] = useState({
-    name: "",
-    isComplete: false,
-  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (todo._id) {
+      const id = todo._id;
+      const updatedTodo = {
+        name: todo.name,
+        isComplete: todo.isComplete,
+        date: todo.date,
+        author: "Greg",
+      };
+      dispatch(updateTodo(updatedTodo, id));
+    } else {
+      const newTodo = {
+        ...todo,
+        date: new Date(),
+      };
+      dispatch(addTodo(newTodo));
+    }
 
     dispatch(addTodo(todo));
 
@@ -55,7 +68,7 @@ const AddTodo = () => {
             fullWidth
             value={todo.name}
             onChange={(e) => {
-              setTodo({ ...todo, name: e.target.value, date: new Date() });
+              setTodo({ ...todo, name: e.target.value });
               console.log(todo);
             }}
           />

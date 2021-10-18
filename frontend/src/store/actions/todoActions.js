@@ -17,10 +17,10 @@ export const getTodos = () => {
   };
 };
 
-export const addTodo = (todo) => {
+export const addTodo = (newTodo) => {
   return (dispatch, getState) => {
     axios
-      .post(`${url}/todos`, todo)
+      .post(`${url}/todos`, newTodo)
       .then((todo) => {
         dispatch({ type: "ADD_TODO", payload: todo });
       })
@@ -29,3 +29,17 @@ export const addTodo = (todo) => {
       });
   };
 };
+
+export const updateTodo = (updatedTodo, id) => {
+  return (dispatch) => {
+    axios
+      .put(`${url}/todos/${id}`, updatedTodo)
+      .then((todo) => {
+        dispatch({ type: "UPDATE_TODO",  todo });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+};
+
