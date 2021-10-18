@@ -54,9 +54,10 @@ const AddTodo = () => {
             autofocus
             fullWidth
             value={todo.name}
-            onChange={(e) =>
-              setTodo({ ...todo, name: e.target.value, date: new Date() })
-            }
+            onChange={(e) => {
+              setTodo({ ...todo, name: e.target.value, date: new Date() });
+              console.log(todo);
+            }}
           />
           <Button
             className={classes.submitButton}

@@ -6,10 +6,10 @@ const auth = require("../middleware/auth");
 //Create instance of Router
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const todos = await Todo.find().sort({ date: -1 });
-    console.log(req.user);
+    //console.log(req.user);
 
     res.send(todos);
   } catch (error) {
