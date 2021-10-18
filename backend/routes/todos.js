@@ -141,14 +141,13 @@ router.patch("/:id", async (req, res) => {
   try {
     //Check to see if a todo with the given id exists
     const todo = await Todo.findById(req.params.id);
-
     //Send Error 404 if there is no To do
     if (!todo) return res.status(404).send("Todo Not Found...");
 
     const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, {
       //Set isComplete to the opposite value
       isComplete: !todo.isComplete,
-    });
+    }, {new: true});
 
     res.send(updatedTodo);
   } catch (error) {
