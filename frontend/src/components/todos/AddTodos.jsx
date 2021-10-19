@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTodo, updateTodo } from "../../store/actions/todoActions";
 
 import { TextField, Button, Toolbar } from "@material-ui/core";
@@ -23,6 +23,8 @@ const AddTodo = ({ todo, setTodo }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const auth = useSelector((state) => state.auth);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -32,7 +34,7 @@ const AddTodo = ({ todo, setTodo }) => {
         name: todo.name,
         isComplete: todo.isComplete,
         date: todo.date,
-        author: todo.author,
+        author: auth.name,
         uid: todo.uid
       };
       dispatch(updateTodo(updatedTodo, id));
@@ -67,7 +69,7 @@ const AddTodo = ({ todo, setTodo }) => {
             fullWidth
             value={todo.name}
             onChange={(e) => {
-              setTodo({ ...todo, name: e.target.value });
+              setTodo({ ...todo, name: e.target.value, author: auth.name });
               console.log(todo);
             }}
           />
