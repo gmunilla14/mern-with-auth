@@ -11,6 +11,7 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "USER_LOADED":
+    case "SIGN_IN":
     case "SIGN_UP":
       toast("Welcome...", { position: toast.POSITION.BOTTOM_RIGHT });
       const user = jwtDecode(action.token);
@@ -21,10 +22,9 @@ const authReducer = (state = initialState, action) => {
         email: user.email,
         _id: user._id,
       };
-      
 
     default:
       return state;
   }
 };
-export default authReducer
+export default authReducer;
