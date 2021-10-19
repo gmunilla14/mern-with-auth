@@ -62,3 +62,19 @@ export const checkTodo = (id) => {
       });
   };
 };
+
+export const deleteTodo = (id) => {
+  return (dispatch) => {
+    axios
+      .delete(`${url}/todos/${id}`)
+      .then((todo) => {
+        dispatch({ type: "DELETE_TODO", id });
+      })
+      .catch((error) => {
+        console.log(error.response);
+        toast.error(error.response?.data, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+      });
+  };
+};
